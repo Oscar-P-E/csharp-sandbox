@@ -1,31 +1,13 @@
-﻿// SKU = Stock Keeping Unit. 
-// SKU value format: <product #>-<2-letter color code>-<size code>
+﻿// FizzBuzz
 
-string sku = "01-MN-L";
-
-string[] product = sku.Split('-');
-
-string type = product[0] switch
+for (int i = 1; i <= 100; i++)
 {
-    "01" => "Sweat shirt",
-    "02" => "T-Shirt",
-    "03" => "Sweat pants",
-    _    => "Other"
-};
-
-string color = product[1] switch
-{
-    "BL" => "Black",
-    "MN" => "Maroon",
-    _    => "White"
-};
-
-string size = product[2] switch
-{
-    "S" => "Small",
-    "M" => "Medium",
-    "L" => "Large",
-    _   => "One Size Fits All"
-};
-
-Console.WriteLine($"Product: {size} {color} {type}");
+    if (i % 3 == 0 && i % 5 == 0)
+        Console.WriteLine(i + " - FizzBuzz");
+    else if (i % 3 == 0)
+        Console.WriteLine(i + " - Fizz");
+    else if (i % 5 == 0)
+        Console.WriteLine(i + " - Buzz");
+    else
+        Console.WriteLine(i);
+}
