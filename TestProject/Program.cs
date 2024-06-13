@@ -1,31 +1,6 @@
-﻿/*
-97 - 100   A+
-93 - 96    A
-90 - 92    A-
-87 - 89    B+
-83 - 86    B
-80 - 82    B-
-77 - 79    C+
-73 - 76    C
-70 - 72    C-
-67 - 69    D+
-63 - 66    D
-60 - 62    D-
-0  - 59    F
-*/
+﻿using System.Diagnostics;
 
-/*
-Student         Grade
-
-Sophia:         92.2    A-
-Andrew:         89.6    B+
-Emma:           85.6    B
-Logan:          91.2    A-
-*/
-
-using System.Diagnostics;
-
-const int examAssignments = 5;
+const int examAssignmentCount = 5;
 
 var studentScores = new Dictionary<string, int[]>
 {
@@ -40,7 +15,13 @@ var studentScores = new Dictionary<string, int[]>
 };
 
 var students = studentScores.Select(kvp => new Student(
-    kvp.Key, CalculateScore(kvp.Value), CalculateGrade(CalculateScore(kvp.Value))));
+    name: kvp.Key,
+    score: CalculateScores(kvp.Value)["Overall Score"],
+    grade: CalculateGrade(CalculateScores(kvp.Value)["Overall Score"]),
+    examScore: CalculateScores(kvp.Value)["Exam Score"],
+    credit: CalculateScores(kvp.Value)["Extra Credit"]
+    ));
+
 
 static string CalculateGrade(decimal score)
 {
@@ -62,30 +43,45 @@ static string CalculateGrade(decimal score)
     };
 }
 
-Console.WriteLine("Student\t\tGrade\n");
+// Student         Exam Score      Overall Grade   Extra Credit
+//
+// Sophia          0               95.8    A       0 (0 pts)
+// Andrew          0               91.2    A-      0 (0 pts)
+// Emma            0               90.4    A-      0 (0 pts)
+// Logan           0               93      A       0 (0 pts)
 
-foreach (var student in students) Console.WriteLine($"{student.Name}:\t\t{student.Score}\t{student.Grade}");
+Console.WriteLine("Student\t\tExam Score\tOverall\tGrade\tExtra Credit\n");
+
+foreach (var student in students) Console.WriteLine($"{student.Name}:\t\t{student.ExamScore}\t\t{student.Score}\t{student.Grade}\t({student.Credit})");
 
 Console.WriteLine("Press the Enter key to continue");
 Console.ReadLine();
 return;
 
-decimal CalculateScore(int[] scores)
+Dictionary<string, decimal> CalculateScores(int[] scores)
 {
-    if (scores.Length <= examAssignments) return (decimal)scores.Sum() / examAssignments;
+    var examScores = scores[..examAssignmentCount];
+    var extraScores = scores.Length >= examAssignmentCount ? scores[examAssignmentCount..] : [];
+    
+    var sumOfScores = examScores.Sum() + extraScores.Sum() * 0.10m;
 
-    var examScores = scores[..examAssignments];
-    var extraScores = scores[examAssignments..];
+    var overallExamScore = 1.0m * examScores.Sum() / examAssignmentCount;
+    var overallTotalScore = (decimal)sumOfScores / examAssignmentCount;
+    var extraCredit = overallTotalScore - overallExamScore;
 
-    Debug.Assert(extraScores != null, nameof(extraScores) + " != null");
-    var totalScore = (decimal)examScores.Sum() + extraScores.Sum() / 10;
-
-    return totalScore / examAssignments;
+    return new Dictionary<string, decimal>
+    {
+        { "Exam Score", overallExamScore },
+        { "Overall Score", overallTotalScore },
+        { "Extra Credit", extraCredit }
+    };
 }
 
-internal class Student(string name, decimal score, string grade)
+internal class Student(string name, decimal score, string grade, decimal examScore, decimal credit)
 {
     public string Name { get; } = name;
     public decimal Score { get; } = score;
     public string Grade { get; } = grade;
+    public decimal ExamScore { get; } = examScore;
+    public decimal Credit { get; } = credit;
 }
