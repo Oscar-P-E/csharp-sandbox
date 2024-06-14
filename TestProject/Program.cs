@@ -1,40 +1,35 @@
-﻿// You must use either the do-while statement or the while statement as an outer game loop.
-// The hero and the monster start with 10 health points.
-// All attacks are a value between 1 and 10.
-// The hero attacks first.
-// Print the amount of health the monster lost and their remaining health.
-// If the monster's health is greater than 0, it can attack the hero.
-// Print the amount of health the hero lost and their remaining health.
-// Continue this sequence of attacking until either the monster's health or hero's health is zero or less.
-// Print the winner.
+﻿/*
+Enter an integer value between 5 and 10
+two
+Sorry, you entered an invalid number, please try again
+2
+You entered 2. Please enter a number between 5 and 10.
+7
+Your input value (7) has been accepted.
+*/
 
-int heroHP = 10;
-int monsterHP = 10;
-Random damage = new Random();
-int min = 1;
-int max = 10;
-int attackDamage = 0;
-bool heroTurn = true;
-string winner = "";
+using static System.Console;
+
+string? userInput;
+bool validNumber = false;
+bool validInput = false;
+int userInputNumber = 0;
+
+WriteLine("Enter an integer value between 5 and 10");
 
 do
 {
-    if (heroTurn)
+    userInput = ReadLine()?.Trim();
+
+    validNumber = int.TryParse(userInput, out userInputNumber);
+
+    if (!validNumber || userInputNumber is < 5 or > 10)
     {
-        attackDamage = damage.Next(min, max + 1);
-        monsterHP -= attackDamage;
-        Console.WriteLine($"Monster was damaged and lost {attackDamage} health and now has {monsterHP} health.");
+        WriteLine("Sorry, you entered an invalid number, please try again");
     }
     else
     {
-        attackDamage = damage.Next(min, max + 1);
-        heroHP -= attackDamage;
-        Console.WriteLine($"Hero was damaged and lost {attackDamage} health and now has {heroHP} health.");
+        validInput = true;
+        WriteLine($"Your input value ({userInputNumber}) has been accepted.");
     }
-
-    heroTurn = !heroTurn;
-} while (heroHP > 0 && monsterHP > 0);
-
-winner = heroHP > 0 ? "Hero" : "Monster";
-
-Console.WriteLine($"Winner: {winner}!");
+} while (validInput == false);
