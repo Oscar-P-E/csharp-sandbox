@@ -1,35 +1,28 @@
 ﻿/*
-Enter an integer value between 5 and 10
-two
-Sorry, you entered an invalid number, please try again
-2
-You entered 2. Please enter a number between 5 and 10.
-7
-Your input value (7) has been accepted.
+Enter your role name (Administrator, Manager, or User)
+Admin
+The role name that you entered, "Admin" is not valid. Enter your role name (Administrator, Manager, or User)
+   Administrator
+Your input value (Administrator) has been accepted.
 */
 
 using static System.Console;
 
-string? userInput;
-bool validNumber = false;
-bool validInput = false;
-int userInputNumber = 0;
+var validInput = false;
 
-WriteLine("Enter an integer value between 5 and 10");
+WriteLine("Enter your role name (Administrator, Manager, or User)");
 
 do
 {
-    userInput = ReadLine()?.Trim();
+    var trimmedInput = ReadLine()?.Trim();
 
-    validNumber = int.TryParse(userInput, out userInputNumber);
-
-    if (!validNumber || userInputNumber is < 5 or > 10)
-    {
-        WriteLine("Sorry, you entered an invalid number, please try again");
-    }
-    else
+    if (trimmedInput != null && (trimmedInput.Equals("administrator", StringComparison.OrdinalIgnoreCase) ||
+        trimmedInput.Equals("manager", StringComparison.OrdinalIgnoreCase) ||
+        trimmedInput.Equals("user", StringComparison.OrdinalIgnoreCase)))
     {
         validInput = true;
-        WriteLine($"Your input value ({userInputNumber}) has been accepted.");
+        WriteLine($"Your input value ({trimmedInput}) has been accepted.");
     }
+    else
+        WriteLine($"The role name that you entered, \"{trimmedInput}\" is not valid. Enter your role name (Administrator, Manager, or User)");
 } while (validInput == false);
