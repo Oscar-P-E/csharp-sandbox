@@ -1,28 +1,16 @@
-﻿/*
-Enter your role name (Administrator, Manager, or User)
-Admin
-The role name that you entered, "Admin" is not valid. Enter your role name (Administrator, Manager, or User)
-   Administrator
-Your input value (Administrator) has been accepted.
-*/
-
-using static System.Console;
-
-var validInput = false;
-
-WriteLine("Enter your role name (Administrator, Manager, or User)");
-
-do
+﻿string[] myStrings = new string[2]
 {
-    var trimmedInput = ReadLine()?.Trim();
+    "I like pizza. I like roast chicken. I like salad", "I like all three of the menu choices"
+};
 
-    if (trimmedInput != null && (trimmedInput.Equals("administrator", StringComparison.OrdinalIgnoreCase) ||
-        trimmedInput.Equals("manager", StringComparison.OrdinalIgnoreCase) ||
-        trimmedInput.Equals("user", StringComparison.OrdinalIgnoreCase)))
+
+
+foreach (string s in myStrings)
+{
+    string[] split = s.Split(',', '.');
+
+    foreach (string s1 in split)
     {
-        validInput = true;
-        WriteLine($"Your input value ({trimmedInput}) has been accepted.");
+       Console.WriteLine(s1.Trim());
     }
-    else
-        WriteLine($"The role name that you entered, \"{trimmedInput}\" is not valid. Enter your role name (Administrator, Manager, or User)");
-} while (validInput == false);
+}
