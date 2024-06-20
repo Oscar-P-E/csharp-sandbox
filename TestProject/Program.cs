@@ -1,11 +1,9 @@
-﻿string pangram = "The quick brown fox jumps over the lazy dog";
+﻿string orderStream = "B123,C234,A345,C15,B177,G3003,C235,B179";
 
-string[] wordArr = pangram.Split(" ");
+string[] orders = orderStream.Split(",");
+Array.Sort(orders);
 
-foreach (string s in wordArr)
+foreach (string order in orders)
 {
-    char[] sArr = s.ToCharArray();
-    Array.Reverse(sArr);
-    string result = new String(sArr);
-    Console.Write(result + " ");
+    Console.WriteLine(order.Length != 4 ? $"{order}\t- Error" : order);
 }
